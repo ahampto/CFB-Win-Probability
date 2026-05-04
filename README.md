@@ -14,6 +14,9 @@ Built using machine learning and deployed as a live Streamlit app.
 ---
 
 ## 🚀 What This Does
+## 🖥️ App Preview
+
+![App Screenshot](app.png)
 
 - Tracks win probability **play-by-play**
 - Updates probability based on:
