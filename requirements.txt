@@ -1,0 +1,46 @@
+# ============================================================
+# CFB Win Probability Engine — Full Pipeline Requirements
+# ============================================================
+# For running data collection, feature engineering, model
+# training, statistical validation, and the Streamlit app.
+#
+# Install:  pip install -r requirements.txt
+#
+# NOTE: PySpark requires Java 8+ installed separately.
+#   macOS/Linux:  brew install java  or  sudo apt install default-jdk
+#   Windows:      https://www.java.com/en/download/
+# ============================================================
+
+# ── Core Data ────────────────────────────────────────────────
+numpy>=1.24.0
+pandas>=2.0.0
+pyarrow>=12.0.0
+
+# ── Distributed Processing ───────────────────────────────────
+pyspark>=3.4.0
+
+# ── Machine Learning ─────────────────────────────────────────
+scikit-learn>=1.3.0
+xgboost>=1.7.0
+joblib>=1.3.0
+
+# ── Statistical Validation ───────────────────────────────────
+statsmodels>=0.14.0
+
+# ── Explainability ───────────────────────────────────────────
+shap>=0.42.0
+
+# ── Visualization ────────────────────────────────────────────
+matplotlib>=3.7.0
+seaborn>=0.12.0
+plotly>=5.15.0
+
+# ── Web Application ──────────────────────────────────────────
+streamlit>=1.28.0
+
+# ── Utilities ────────────────────────────────────────────────
+requests>=2.31.0
+tqdm>=4.65.0
+
+# ── Optional: LSTM experiments (not in production) ───────────
+# tensorflow>=2.13.0
