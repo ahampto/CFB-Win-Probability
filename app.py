@@ -252,7 +252,7 @@ if selected_game_id:
             sc5.metric(f"{home_team} WP", row['wp_percent'])
             
             st.markdown(f"**Possession:** {row['pos_team']} | **Down & Distance:** {int(row['down'])} & {int(row['distance'])} | **Yards to Goal:** {int(row['yards_to_goal'])}")
-            st.plotly_chart(draw_football_field(row), use_container_width=True, key=f"field_{idx}")
+            st.plotly_chart(draw_football_field(row), width='stretch', key=f"field_{idx}")
             
             # Play Type & Touchdown Logic
             play_text_lower = str(row['play_text']).lower()
@@ -267,7 +267,7 @@ if selected_game_id:
             
             fig_wp = go.Figure(base_wp_fig)
             fig_wp.add_trace(go.Scatter(x=[row['seconds_elapsed']], y=[row['home_wp']], mode='markers', marker=dict(color='red', size=15), showlegend=False))
-            st.plotly_chart(fig_wp, use_container_width=True, key=f"wp_{idx}")
+            st.plotly_chart(fig_wp, width='stretch', key=f"wp_{idx}")
 
     # Main Loop
     if st.session_state.is_playing:
