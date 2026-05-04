@@ -8,7 +8,7 @@ Built using machine learning and deployed as a live Streamlit app.
 ## 🔗 Links
 
 - 🌐 **Live App:** https://cfb-win-probability-8uj6gnxua2l5gy8xgbhyqr.streamlit.app/
-- 📄 **Report:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final_Report.docx
+- 📄 **Report:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final_Report.pdf
 - 📊 **Presentation:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final_presentation.pdf
 
 ---
