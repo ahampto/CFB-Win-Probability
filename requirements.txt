@@ -12,9 +12,9 @@
 
 
 
-streamlit>=1.28.0
-numpy>=1.24.0
-pandas>=2.0.0
+#streamlit>=1.28.0
+#numpy>=1.24.0
+#pandas>=2.0.0
 # pyarrow>=12.0.0
 # scikit-learn==1.6.1
 # xgboost>=1.7.0
@@ -23,6 +23,16 @@ pandas>=2.0.0
 
 
 
-import joblib
+#import joblib
 
-st.write("imports working")
+#st.write("imports working")
+
+
+streamlit
+pandas
+numpy
+pyarrow
+scikit-learn==1.6.1
+xgboost
+joblib
+plotly
