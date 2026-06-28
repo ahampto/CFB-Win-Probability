@@ -6,21 +6,46 @@ import plotly.express as px
 import plotly.graph_objects as go
 import time
 import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+MODELS_DIR = BASE_DIR / 'Models'
+DATA_DIR = BASE_DIR / 'Data'
+
+
+def resolve_asset(path: str) -> Path:
+    asset_path = (BASE_DIR / path).resolve()
+    if not asset_path.exists():
+        raise FileNotFoundError(f"Required asset not found: {asset_path}")
+    return asset_path
+
 
 # APP STARTUP 
 
 @st.cache_resource
 def load_models():
-    xgb_model = joblib.load('Models/cfb_xgboost_prod.pkl')
-    log_model = joblib.load('Models/cfb_logreg_prod.pkl')
-    scaler = joblib.load('Models/cfb_prod_scaler.pkl')
-    return xgb_model, log_model, scaler
+    try:
+        xgb_model = joblib.load(resolve_asset('Models/cfb_xgboost_prod.pkl'))
+        log_model = joblib.load(resolve_asset('Models/cfb_logreg_prod.pkl'))
+        scaler = joblib.load(resolve_asset('Models/cfb_prod_scaler.pkl'))
+        return xgb_model, log_model, scaler
+    except Exception as exc:
+        raise RuntimeError(
+            f"Unable to load model files from {MODELS_DIR}. "
+            "Check that the app is deployed with the repository contents intact."
+        ) from exc
 
 @st.cache_data
 def load_data():
-    ml_df = pd.read_parquet('Data/cfb_ml_features_prod.parquet')
-    raw_df = pd.read_parquet('Data/cfb_raw_context_prod.parquet')
-    return ml_df, raw_df
+    try:
+        ml_df = pd.read_parquet(resolve_asset('Data/cfb_ml_features_prod.parquet'))
+        raw_df = pd.read_parquet(resolve_asset('Data/cfb_raw_context_prod.parquet'))
+        return ml_df, raw_df
+    except Exception as exc:
+        raise RuntimeError(
+            f"Unable to load data files from {DATA_DIR}. "
+            "Check that the parquet files are present in the deployed app."
+        ) from exc
 
 
 #CORE LOGIC
