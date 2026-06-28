@@ -2,10 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
-import plotly.express as px
 import plotly.graph_objects as go
 import time
-import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -35,16 +33,38 @@ def load_models():
             "Check that the app is deployed with the repository contents intact."
         ) from exc
 
+
 @st.cache_data
-def load_data():
+def load_game_index():
     try:
-        ml_df = pd.read_parquet(resolve_asset('Data/cfb_ml_features_prod.parquet'))
-        raw_df = pd.read_parquet(resolve_asset('Data/cfb_raw_context_prod.parquet'))
+        game_index = pd.read_parquet(
+            resolve_asset('Data/cfb_raw_context_prod.parquet'),
+            columns=['game_id', 'home_team', 'away_team'],
+        )
+        return game_index.drop_duplicates(subset=['game_id']).reset_index(drop=True)
+    except Exception as exc:
+        raise RuntimeError(
+            f"Unable to load game index from {DATA_DIR}. "
+            "Check that the parquet files are present in the deployed app."
+        ) from exc
+
+
+@st.cache_data
+def load_game_data(game_id):
+    try:
+        game_id_value = int(game_id)
+        ml_df = pd.read_parquet(
+            resolve_asset('Data/cfb_ml_features_prod.parquet'),
+            filters=[('game_id', '=', game_id_value)],
+        )
+        raw_df = pd.read_parquet(
+            resolve_asset('Data/cfb_raw_context_prod.parquet'),
+            filters=[('game_id', '=', game_id_value)],
+        )
         return ml_df, raw_df
     except Exception as exc:
         raise RuntimeError(
-            f"Unable to load data files from {DATA_DIR}. "
-            "Check that the parquet files are present in the deployed app."
+            f"Unable to load data for game {game_id} from {DATA_DIR}."
         ) from exc
 
 
@@ -162,7 +182,7 @@ if 'current_game_id' not in st.session_state:
     st.session_state.current_game_id = None
 
 xgb_model, log_model, scaler = load_models()
-ml_data, raw_data = load_data()
+game_index = load_game_index()
 
 #  SIDEBAR 
 st.sidebar.header("⚙️ Settings")
@@ -208,13 +228,13 @@ with st.sidebar.expander("📚 What do these metrics mean?"):
     """, unsafe_allow_html=True)
 
 st.sidebar.header("🔍 Find a Game")
-all_teams = sorted(list(set(raw_data['home_team'].dropna().unique()) | set(raw_data['away_team'].dropna().unique())))
+all_teams = sorted(list(set(game_index['home_team'].dropna().unique()) | set(game_index['away_team'].dropna().unique())))
 selected_team = st.sidebar.selectbox("Filter by Team:", ["All Teams"] + all_teams)
 
 if selected_team != "All Teams":
-    filtered_games = raw_data[(raw_data['home_team'] == selected_team) | (raw_data['away_team'] == selected_team)]
+    filtered_games = game_index[(game_index['home_team'] == selected_team) | (game_index['away_team'] == selected_team)]
 else:
-    filtered_games = raw_data
+    filtered_games = game_index
 
 game_mapping = {row['game_id']: f"{row['away_team']} @ {row['home_team']}" for _, row in filtered_games.drop_duplicates(subset=['game_id']).iterrows()}
 selected_game_id = st.sidebar.selectbox("Select Matchup:", list(game_mapping.keys()), format_func=lambda x: game_mapping[x])
@@ -226,6 +246,7 @@ if selected_game_id:
         st.session_state.play_idx = 0
         st.session_state.is_playing = False
         
+    ml_data, raw_data = load_game_data(selected_game_id)
     active_model = xgb_model if model_choice == "XGBoost" else log_model
     df = generate_win_probability_dashboard(selected_game_id, ml_data, raw_data, active_model, scaler, model_choice)
     
