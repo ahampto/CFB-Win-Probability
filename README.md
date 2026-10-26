@@ -4,7 +4,8 @@ A play-by-play win probability model for FBS college football, trained on 1.72 m
 and deployed as an interactive app that replays any game snap by snap.
 
 **Live app:** https://cfb-win-probability.streamlit.app/
-**Report:** [Final_Report.pdf](Final_Report.pdf) · **Presentation:** [Final presentation.pdf](Final%20presentation.pdf)
+**Report:** [Final_Report.pdf](Final_Report.pdf) · 
+**Presentation:** [Final presentation.pdf](Final%20presentation.pdf)
 
 ![App screenshot](app.png)
 
