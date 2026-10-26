@@ -1,4 +1,4 @@
-# 🏈 College Football Win Probability Model
+# College Football Win Probability Model
 
 An interactive win probability model for college football that updates after every play.  
 Built using machine learning and deployed as a live Streamlit app.
@@ -7,14 +7,14 @@ Built using machine learning and deployed as a live Streamlit app.
 
 ## 🔗 Links
 
-- 🌐 **Live App:** https://cfb-win-probability-8uj6gnxua2l5gy8xgbhyqr.streamlit.app/
-- 📄 **Report:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final_Report.pdf
-- 📊 **Presentation:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final%20presentation.pdf
+-  **Live App:** https://cfb-win-probability-8uj6gnxua2l5gy8xgbhyqr.streamlit.app/
+-  **Report:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final_Report.pdf
+-  **Presentation:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final%20presentation.pdf
 
 ---
 
-## 🚀 What This Does
-## 🖥️ App Preview
+##  What This Does
+##  App Preview
 
 ![App Screenshot](app.png)
 
@@ -29,7 +29,7 @@ Built using machine learning and deployed as a live Streamlit app.
 
 ---
 
-## 🧠 Approach (High Level)
+##  Approach (High Level)
 
 Instead of relying only on complex models, this project focuses on **structuring the data to reflect how football works**.
 
@@ -47,7 +47,7 @@ Both performed similarly, showing that **feature design was the most important f
 
 ---
 
-## 📊 Results
+##  Results
 
 - ROC-AUC: ~0.92  
 - Accuracy: ~83%  
@@ -55,7 +55,7 @@ Both performed similarly, showing that **feature design was the most important f
 
 ---
 
-## 🖥️ App Features
+##  App Features
 
 - Play-by-play game replay
 - Smooth win probability graph
@@ -64,14 +64,14 @@ Both performed similarly, showing that **feature design was the most important f
 
 ---
 
-## 📌 Takeaway
+##  Takeaway
 
 When the data is structured well, even simpler models can perform at a very high level.  
 In this project, feature engineering captured most of the complexity of the problem.
 
 ---
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
 - Python
 - scikit-learn
@@ -81,6 +81,6 @@ In this project, feature engineering captured most of the complexity of the prob
 
 ---
 
-## 👤 Author
+##  Author
 
 Alvin Hampton
