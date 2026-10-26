@@ -1,86 +1,66 @@
 # College Football Win Probability Model
 
-An interactive win probability model for college football that updates after every play.  
-Built using machine learning and deployed as a live Streamlit app.
+A play-by-play win probability model for FBS college football, trained on 1.72 million plays
+and deployed as an interactive app that replays any game snap by snap.
 
----
+**Live app:** https://cfb-win-probability.streamlit.app/
+**Report:** [Final_Report.pdf](Final_Report.pdf) · **Presentation:** [Final presentation.pdf](Final%20presentation.pdf)
 
-## 🔗 Links
+![App screenshot](app.png)
 
--  **Live App:** https://cfb-win-probability-8uj6gnxua2l5gy8xgbhyqr.streamlit.app/
--  **Report:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final_Report.pdf
--  **Presentation:** https://github.com/ahampto/CFB-Win-Probability/blob/main/Final%20presentation.pdf
+## What the app does
 
----
+- Pick any game from the dataset and replay it play by play, or jump to any point.
+- Watch win probability update after every snap, shown as one continuous line from the
+  home team's point of view, like a broadcast graphic.
+- Compare the two models (logistic regression and XGBoost) on the same game.
+- See the **Play of the Game**, flagged automatically as the play with the largest
+  win-probability swing for the winning team.
 
-##  What This Does
-##  App Preview
+## Data
 
-![App Screenshot](app.png)
+- **Source:** [CollegeFootballData.com](https://collegefootballdata.com), collected with the
+  R package `cfbfastR`.
+- **Coverage:** all FBS games from the 2017–2025 seasons, excluding 2020 (the shortened COVID
+  season): eight seasons and 1,718,250 plays.
+- **Cleaning:** removed 114 post-snap columns that would leak the outcome, dropped overtime
+  plays, fixed the game clock to run continuously from 3,600 seconds to zero, corrected
+  goal-to-go distances, and reframed every feature from the possession team's point of view.
 
-- Tracks win probability **play-by-play**
-- Updates probability based on:
-  - score
-  - time remaining
-  - field position
-  - game situation
-- Lets users **replay full games interactively**
-- Highlights the **most impactful play ("Play of the Game")**
+## Approach
 
----
+The model is built around features that encode how football works, rather than relying on
+model complexity alone. The 24 features fall into four groups:
 
-##  Approach (High Level)
+- **Game state:** down, distance, yards to goal, time remaining, score differential,
+  timeouts, home field, Elo ratings and the Vegas spread.
+- **Momentum:** drive yards, drive success rate, drive time and rolling EPA and yards over
+  the last five plays.
+- **Interactions:** for example, score differential × time elapsed (a lead matters more as
+  time runs out) and spread × time remaining (pregame expectations fade as the game goes on).
+- **Polynomial terms:** for example, squared score differential (a 14-point lead is far safer
+  than twice a 7-point lead).
 
-Instead of relying only on complex models, this project focuses on **structuring the data to reflect how football works**.
+Train and test sets were split by game, so the model is always evaluated on games it has
+never seen.
 
-Key ideas:
-- A lead becomes more important as time runs out
-- Large leads are safer than small leads
-- Momentum from recent plays matters
-- Pre-game expectations matter early, but less over time
+## Results
 
-Two models were used:
-- Logistic Regression
-- XGBoost
+| Metric | Logistic regression | XGBoost |
+|---|---|---|
+| ROC-AUC | 0.925 | 0.926 |
+| Brier score | 0.112 | 0.111 |
+| Log loss | 0.344 | 0.349 |
+| Accuracy | 83.3% | 83.5% |
 
-Both performed similarly, showing that **feature design was the most important factor**.
+The regularized logistic regression performs as well as a 500-tree XGBoost model. The
+engineered features captured the non-linear structure of the game, so a simple, smooth model
+was enough.
 
----
+## Tech stack
 
-##  Results
+Python, pandas, scikit-learn, XGBoost, statsmodels, Plotly and Streamlit.
 
-- ROC-AUC: ~0.92  
-- Accuracy: ~83%  
-- Well-calibrated probability predictions (not just correct outcomes)
-
----
-
-##  App Features
-
-- Play-by-play game replay
-- Smooth win probability graph
-- Model comparison (LogReg vs XGBoost)
-- Automatic detection of key turning points
-
----
-
-##  Takeaway
-
-When the data is structured well, even simpler models can perform at a very high level.  
-In this project, feature engineering captured most of the complexity of the problem.
-
----
-
-##  Tech Stack
-
-- Python
-- scikit-learn
-- XGBoost
-- Streamlit
-- Plotly
-
----
-
-##  Author
+## Author
 
 Alvin Hampton
